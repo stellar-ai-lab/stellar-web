@@ -1,13 +1,24 @@
+import type { ReactNode } from "react"
+import { Toaster } from "sonner"
 import {
   HeadContent,
   Link,
   Scripts,
   createRootRoute,
 } from "@tanstack/react-router"
-import type { ReactNode } from "react"
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { AuthProvider } from "@/hooks/useAuth"
 import appCss from "../styles.css?url"
+import { TooltipProvider } from "@/components/ui/tooltip"
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      retry: 1,
+    },
+  },
+})
 
 export const Route = createRootRoute({
   notFoundComponent: NotFound,
@@ -53,14 +64,19 @@ function NotFound() {
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <AuthProvider>{children}</AuthProvider>
-        <Scripts />
-      </body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <html lang="en">
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+          <TooltipProvider>
+            <AuthProvider>{children}</AuthProvider>
+            <Toaster richColors position="top-center" />
+            <Scripts />
+          </TooltipProvider>
+        </body>
+      </html>
+    </QueryClientProvider>
   )
 }
