@@ -10,8 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as FeaturesRouteRouteImport } from './routes/_features/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as FeaturesIndexRouteImport } from './routes/_features/index'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -19,15 +20,19 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const FeaturesRouteRoute = FeaturesRouteRouteImport.update({
+  id: '/_features',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthIndexRoute = AuthIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AuthRouteRoute,
+} as any)
+const FeaturesIndexRoute = FeaturesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FeaturesRouteRoute,
 } as any)
 const AuthSigninRoute = AuthSigninRouteImport.update({
   id: '/signin',
@@ -36,33 +41,40 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/': typeof AuthIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
   '/auth/signin': typeof AuthSigninRoute
+  '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_features': typeof FeaturesRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
+  '/_features/': typeof FeaturesIndexRoute
   '/auth/': typeof AuthIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths: '/' | '/auth' | '/auth/signin' | '/auth/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/signin' | '/auth'
-  id: '__root__' | '/' | '/auth' | '/auth/signin' | '/auth/'
+  to: '/auth/signin' | '/' | '/auth'
+  id:
+    | '__root__'
+    | '/_features'
+    | '/auth'
+    | '/auth/signin'
+    | '/_features/'
+    | '/auth/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  FeaturesRouteRoute: typeof FeaturesRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
 }
 
@@ -75,11 +87,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
+    '/_features': {
+      id: '/_features'
+      path: ''
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+      preLoaderRoute: typeof FeaturesRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/': {
@@ -88,6 +100,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/'
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof AuthRouteRoute
+    }
+    '/_features/': {
+      id: '/_features/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof FeaturesIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
     }
     '/auth/signin': {
       id: '/auth/signin'
@@ -98,6 +117,18 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface FeaturesRouteRouteChildren {
+  FeaturesIndexRoute: typeof FeaturesIndexRoute
+}
+
+const FeaturesRouteRouteChildren: FeaturesRouteRouteChildren = {
+  FeaturesIndexRoute: FeaturesIndexRoute,
+}
+
+const FeaturesRouteRouteWithChildren = FeaturesRouteRoute._addFileChildren(
+  FeaturesRouteRouteChildren,
+)
 
 interface AuthRouteRouteChildren {
   AuthSigninRoute: typeof AuthSigninRoute
@@ -114,7 +145,7 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  FeaturesRouteRoute: FeaturesRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport

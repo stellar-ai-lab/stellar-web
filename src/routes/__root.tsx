@@ -1,10 +1,16 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
-import { TanStackDevtools } from "@tanstack/react-devtools"
+import {
+  HeadContent,
+  Link,
+  Scripts,
+  createRootRoute,
+} from "@tanstack/react-router"
+import type { ReactNode } from "react"
 
+import { AuthProvider } from "@/hooks/useAuth"
 import appCss from "../styles.css?url"
 
 export const Route = createRootRoute({
+  notFoundComponent: NotFound,
   head: () => ({
     meta: [
       {
@@ -28,25 +34,31 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function NotFound() {
+  return (
+    <div className="flex min-h-svh flex-col items-center justify-center gap-3 text-center">
+      <p className="text-7xl font-semibold tracking-tight">404</p>
+      <p className="text-sm text-muted-foreground">
+        This page doesn&apos;t exist.
+      </p>
+      <Link
+        to="/"
+        className="text-sm underline underline-offset-4 transition-opacity hover:opacity-70"
+      >
+        Go home
+      </Link>
+    </div>
+  )
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        {children}
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        <AuthProvider>{children}</AuthProvider>
         <Scripts />
       </body>
     </html>
