@@ -1,5 +1,6 @@
 import * as z from "zod"
 import { useState } from "react"
+import { toast } from "sonner"
 import { Controller, useForm } from "react-hook-form"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema"
@@ -10,6 +11,7 @@ import {
   ViewOffIcon,
 } from "@hugeicons/core-free-icons"
 import { useSignIn } from "@/hooks/useSupabaseAuth"
+import { LoginSchema } from "@/schemas/auth-schema"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,7 +21,6 @@ import {
   FieldLabel,
   FieldSet,
 } from "@/components/ui/field"
-import { LoginSchema } from "@/schemas/auth-schema"
 import {
   Card,
   CardContent,
@@ -27,7 +28,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { toast } from "sonner"
 
 type FormData = z.infer<typeof LoginSchema>
 
