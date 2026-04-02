@@ -1,5 +1,4 @@
-import { useState } from "react"
-import { useNavigate } from "@tanstack/react-router"
+import { useNavigate, useRouterState } from "@tanstack/react-router"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Separator } from "@/components/ui/separator"
 import { NavUser } from "@/components/sidebar/nav-user"
@@ -38,45 +37,38 @@ const data = {
   navMain: [
     {
       title: "Home",
-      url: "#",
+      url: "/",
       icon: <HugeiconsIcon icon={Home01Icon} />,
-      isActive: true,
     },
     {
       title: "Timesheet",
       url: "#",
       icon: <HugeiconsIcon icon={Calendar03Icon} />,
-      isActive: false,
     },
     {
       title: "Trainings",
       url: "#",
       icon: <HugeiconsIcon icon={Target02Icon} />,
-      isActive: false,
     },
     {
       title: "Engagement",
       url: "#",
       icon: <HugeiconsIcon icon={Chat01Icon} />,
-      isActive: false,
     },
     {
       title: "Directory",
       url: "#",
       icon: <HugeiconsIcon icon={UserGroupIcon} />,
-      isActive: false,
     },
     {
       title: "Analytics",
       url: "#",
       icon: <HugeiconsIcon icon={Chart01Icon} />,
-      isActive: false,
     },
     {
       title: "AI",
       url: "#",
       icon: <HugeiconsIcon icon={ArtificialIntelligence08Icon} />,
-      isActive: false,
     },
   ],
   adminNav: [
@@ -84,32 +76,34 @@ const data = {
       title: "Manage Accounts",
       url: "/manage-accounts",
       icon: <HugeiconsIcon icon={IdentityCardIcon} />,
-      isActive: true,
     },
     {
       title: "AI Agent",
       url: "#",
       icon: <HugeiconsIcon icon={AiBrain01Icon} />,
-      isActive: false,
     },
     {
       title: "Projects",
       url: "#",
       icon: <HugeiconsIcon icon={StartUp02Icon} />,
-      isActive: false,
     },
     {
       title: "Game",
       url: "#",
       icon: <HugeiconsIcon icon={PuzzleIcon} />,
-      isActive: false,
     },
   ],
 }
 
+function isPathActive(pathname: string, url: string) {
+  if (url === "#") return false
+  if (url === "/") return pathname === "/"
+  return pathname.startsWith(url)
+}
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navigate = useNavigate()
-  const [activeItem, setActiveItem] = useState(data.navMain[0])
+  const { location } = useRouterState()
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -142,8 +136,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       children: item.title,
                       hidden: false,
                     }}
-                    onClick={() => setActiveItem(item)}
-                    isActive={activeItem?.title === item.title}
+                    onClick={() =>
+                      item.url !== "#" && navigate({ to: item.url })
+                    }
+                    isActive={isPathActive(location.pathname, item.url)}
                     className="bg-transparent px-2.5 hover:bg-chart-1/20 hover:text-primary data-[active=true]:bg-chart-1/50 data-[active=true]:text-primary md:px-2"
                   >
                     {item.icon}
@@ -162,8 +158,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       children: item.title,
                       hidden: false,
                     }}
-                    onClick={() => navigate({ to: item.url })}
-                    isActive={activeItem?.title === item.title}
+                    onClick={() =>
+                      item.url !== "#" && navigate({ to: item.url })
+                    }
+                    isActive={isPathActive(location.pathname, item.url)}
                     className="bg-transparent px-2.5 hover:bg-chart-1/20 hover:text-primary data-[active=true]:bg-chart-1/50 data-[active=true]:text-primary md:px-2"
                   >
                     {item.icon}
