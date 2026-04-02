@@ -24,7 +24,7 @@ function FeaturesLayout() {
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background p-4">
+        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background px-8 py-4">
           <HeaderBreadcrumb />
         </header>
         <Outlet />

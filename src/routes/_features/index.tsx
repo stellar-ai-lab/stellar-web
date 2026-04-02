@@ -14,8 +14,8 @@ function App() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4 p-4">
-      <div className="flex min-h-svh p-6">
+    <div className="flex flex-1 flex-col gap-4 px-8 py-4">
+      <div className="flex min-h-svh">
         <div className="flex max-w-md min-w-0 flex-col gap-4 text-xs leading-loose">
           <div>
             <h1 className="font-medium">Project ready!</h1>
