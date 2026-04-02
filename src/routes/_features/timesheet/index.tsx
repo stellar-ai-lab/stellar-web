@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/_features/manage-accounts/")({
+export const Route = createFileRoute("/_features/timesheet/")({
   component: RouteComponent,
 })
 
@@ -10,9 +10,9 @@ function RouteComponent() {
       <div className="flex min-h-svh">
         <div className="flex max-w-md min-w-0 flex-col gap-4 text-xs leading-loose">
           <div>
-            <h1 className="text-2xl font-bold">Manage Accounts</h1>
+            <h1 className="text-2xl font-bold">Timesheet</h1>
             <p className="text-sm text-muted-foreground">
-              Manage your accounts and settings.
+              Manage your timesheet and settings.
             </p>
           </div>
         </div>

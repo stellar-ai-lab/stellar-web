@@ -14,7 +14,17 @@ import { Route as FeaturesRouteRouteImport } from './routes/_features/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as FeaturesIndexRouteImport } from './routes/_features/index'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
+import { Route as FeaturesTrainingsIndexRouteImport } from './routes/_features/trainings/index'
+import { Route as FeaturesTimesheetIndexRouteImport } from './routes/_features/timesheet/index'
+import { Route as FeaturesResearchIndexRouteImport } from './routes/_features/research/index'
+import { Route as FeaturesProjectsIndexRouteImport } from './routes/_features/projects/index'
 import { Route as FeaturesManageAccountsIndexRouteImport } from './routes/_features/manage-accounts/index'
+import { Route as FeaturesGameIndexRouteImport } from './routes/_features/game/index'
+import { Route as FeaturesEngagementsIndexRouteImport } from './routes/_features/engagements/index'
+import { Route as FeaturesDirectoryIndexRouteImport } from './routes/_features/directory/index'
+import { Route as FeaturesAnnouncementIndexRouteImport } from './routes/_features/announcement/index'
+import { Route as FeaturesAnalyticsIndexRouteImport } from './routes/_features/analytics/index'
+import { Route as FeaturesAiIndexRouteImport } from './routes/_features/ai/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -40,25 +50,97 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const FeaturesTrainingsIndexRoute = FeaturesTrainingsIndexRouteImport.update({
+  id: '/trainings/',
+  path: '/trainings/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
+const FeaturesTimesheetIndexRoute = FeaturesTimesheetIndexRouteImport.update({
+  id: '/timesheet/',
+  path: '/timesheet/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
+const FeaturesResearchIndexRoute = FeaturesResearchIndexRouteImport.update({
+  id: '/research/',
+  path: '/research/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
+const FeaturesProjectsIndexRoute = FeaturesProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
 const FeaturesManageAccountsIndexRoute =
   FeaturesManageAccountsIndexRouteImport.update({
     id: '/manage-accounts/',
     path: '/manage-accounts/',
     getParentRoute: () => FeaturesRouteRoute,
   } as any)
+const FeaturesGameIndexRoute = FeaturesGameIndexRouteImport.update({
+  id: '/game/',
+  path: '/game/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
+const FeaturesEngagementsIndexRoute =
+  FeaturesEngagementsIndexRouteImport.update({
+    id: '/engagements/',
+    path: '/engagements/',
+    getParentRoute: () => FeaturesRouteRoute,
+  } as any)
+const FeaturesDirectoryIndexRoute = FeaturesDirectoryIndexRouteImport.update({
+  id: '/directory/',
+  path: '/directory/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
+const FeaturesAnnouncementIndexRoute =
+  FeaturesAnnouncementIndexRouteImport.update({
+    id: '/announcement/',
+    path: '/announcement/',
+    getParentRoute: () => FeaturesRouteRoute,
+  } as any)
+const FeaturesAnalyticsIndexRoute = FeaturesAnalyticsIndexRouteImport.update({
+  id: '/analytics/',
+  path: '/analytics/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
+const FeaturesAiIndexRoute = FeaturesAiIndexRouteImport.update({
+  id: '/ai/',
+  path: '/ai/',
+  getParentRoute: () => FeaturesRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/': typeof AuthIndexRoute
+  '/ai/': typeof FeaturesAiIndexRoute
+  '/analytics/': typeof FeaturesAnalyticsIndexRoute
+  '/announcement/': typeof FeaturesAnnouncementIndexRoute
+  '/directory/': typeof FeaturesDirectoryIndexRoute
+  '/engagements/': typeof FeaturesEngagementsIndexRoute
+  '/game/': typeof FeaturesGameIndexRoute
   '/manage-accounts/': typeof FeaturesManageAccountsIndexRoute
+  '/projects/': typeof FeaturesProjectsIndexRoute
+  '/research/': typeof FeaturesResearchIndexRoute
+  '/timesheet/': typeof FeaturesTimesheetIndexRoute
+  '/trainings/': typeof FeaturesTrainingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthIndexRoute
+  '/ai': typeof FeaturesAiIndexRoute
+  '/analytics': typeof FeaturesAnalyticsIndexRoute
+  '/announcement': typeof FeaturesAnnouncementIndexRoute
+  '/directory': typeof FeaturesDirectoryIndexRoute
+  '/engagements': typeof FeaturesEngagementsIndexRoute
+  '/game': typeof FeaturesGameIndexRoute
   '/manage-accounts': typeof FeaturesManageAccountsIndexRoute
+  '/projects': typeof FeaturesProjectsIndexRoute
+  '/research': typeof FeaturesResearchIndexRoute
+  '/timesheet': typeof FeaturesTimesheetIndexRoute
+  '/trainings': typeof FeaturesTrainingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +149,52 @@ export interface FileRoutesById {
   '/auth/signin': typeof AuthSigninRoute
   '/_features/': typeof FeaturesIndexRoute
   '/auth/': typeof AuthIndexRoute
+  '/_features/ai/': typeof FeaturesAiIndexRoute
+  '/_features/analytics/': typeof FeaturesAnalyticsIndexRoute
+  '/_features/announcement/': typeof FeaturesAnnouncementIndexRoute
+  '/_features/directory/': typeof FeaturesDirectoryIndexRoute
+  '/_features/engagements/': typeof FeaturesEngagementsIndexRoute
+  '/_features/game/': typeof FeaturesGameIndexRoute
   '/_features/manage-accounts/': typeof FeaturesManageAccountsIndexRoute
+  '/_features/projects/': typeof FeaturesProjectsIndexRoute
+  '/_features/research/': typeof FeaturesResearchIndexRoute
+  '/_features/timesheet/': typeof FeaturesTimesheetIndexRoute
+  '/_features/trainings/': typeof FeaturesTrainingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/auth/signin' | '/auth/' | '/manage-accounts/'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/auth/signin'
+    | '/auth/'
+    | '/ai/'
+    | '/analytics/'
+    | '/announcement/'
+    | '/directory/'
+    | '/engagements/'
+    | '/game/'
+    | '/manage-accounts/'
+    | '/projects/'
+    | '/research/'
+    | '/timesheet/'
+    | '/trainings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth/signin' | '/' | '/auth' | '/manage-accounts'
+  to:
+    | '/auth/signin'
+    | '/'
+    | '/auth'
+    | '/ai'
+    | '/analytics'
+    | '/announcement'
+    | '/directory'
+    | '/engagements'
+    | '/game'
+    | '/manage-accounts'
+    | '/projects'
+    | '/research'
+    | '/timesheet'
+    | '/trainings'
   id:
     | '__root__'
     | '/_features'
@@ -81,7 +202,17 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/_features/'
     | '/auth/'
+    | '/_features/ai/'
+    | '/_features/analytics/'
+    | '/_features/announcement/'
+    | '/_features/directory/'
+    | '/_features/engagements/'
+    | '/_features/game/'
     | '/_features/manage-accounts/'
+    | '/_features/projects/'
+    | '/_features/research/'
+    | '/_features/timesheet/'
+    | '/_features/trainings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -126,6 +257,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_features/trainings/': {
+      id: '/_features/trainings/'
+      path: '/trainings'
+      fullPath: '/trainings/'
+      preLoaderRoute: typeof FeaturesTrainingsIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/timesheet/': {
+      id: '/_features/timesheet/'
+      path: '/timesheet'
+      fullPath: '/timesheet/'
+      preLoaderRoute: typeof FeaturesTimesheetIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/research/': {
+      id: '/_features/research/'
+      path: '/research'
+      fullPath: '/research/'
+      preLoaderRoute: typeof FeaturesResearchIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/projects/': {
+      id: '/_features/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof FeaturesProjectsIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
     '/_features/manage-accounts/': {
       id: '/_features/manage-accounts/'
       path: '/manage-accounts'
@@ -133,17 +292,79 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesManageAccountsIndexRouteImport
       parentRoute: typeof FeaturesRouteRoute
     }
+    '/_features/game/': {
+      id: '/_features/game/'
+      path: '/game'
+      fullPath: '/game/'
+      preLoaderRoute: typeof FeaturesGameIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/engagements/': {
+      id: '/_features/engagements/'
+      path: '/engagements'
+      fullPath: '/engagements/'
+      preLoaderRoute: typeof FeaturesEngagementsIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/directory/': {
+      id: '/_features/directory/'
+      path: '/directory'
+      fullPath: '/directory/'
+      preLoaderRoute: typeof FeaturesDirectoryIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/announcement/': {
+      id: '/_features/announcement/'
+      path: '/announcement'
+      fullPath: '/announcement/'
+      preLoaderRoute: typeof FeaturesAnnouncementIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/analytics/': {
+      id: '/_features/analytics/'
+      path: '/analytics'
+      fullPath: '/analytics/'
+      preLoaderRoute: typeof FeaturesAnalyticsIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
+    '/_features/ai/': {
+      id: '/_features/ai/'
+      path: '/ai'
+      fullPath: '/ai/'
+      preLoaderRoute: typeof FeaturesAiIndexRouteImport
+      parentRoute: typeof FeaturesRouteRoute
+    }
   }
 }
 
 interface FeaturesRouteRouteChildren {
   FeaturesIndexRoute: typeof FeaturesIndexRoute
+  FeaturesAiIndexRoute: typeof FeaturesAiIndexRoute
+  FeaturesAnalyticsIndexRoute: typeof FeaturesAnalyticsIndexRoute
+  FeaturesAnnouncementIndexRoute: typeof FeaturesAnnouncementIndexRoute
+  FeaturesDirectoryIndexRoute: typeof FeaturesDirectoryIndexRoute
+  FeaturesEngagementsIndexRoute: typeof FeaturesEngagementsIndexRoute
+  FeaturesGameIndexRoute: typeof FeaturesGameIndexRoute
   FeaturesManageAccountsIndexRoute: typeof FeaturesManageAccountsIndexRoute
+  FeaturesProjectsIndexRoute: typeof FeaturesProjectsIndexRoute
+  FeaturesResearchIndexRoute: typeof FeaturesResearchIndexRoute
+  FeaturesTimesheetIndexRoute: typeof FeaturesTimesheetIndexRoute
+  FeaturesTrainingsIndexRoute: typeof FeaturesTrainingsIndexRoute
 }
 
 const FeaturesRouteRouteChildren: FeaturesRouteRouteChildren = {
   FeaturesIndexRoute: FeaturesIndexRoute,
+  FeaturesAiIndexRoute: FeaturesAiIndexRoute,
+  FeaturesAnalyticsIndexRoute: FeaturesAnalyticsIndexRoute,
+  FeaturesAnnouncementIndexRoute: FeaturesAnnouncementIndexRoute,
+  FeaturesDirectoryIndexRoute: FeaturesDirectoryIndexRoute,
+  FeaturesEngagementsIndexRoute: FeaturesEngagementsIndexRoute,
+  FeaturesGameIndexRoute: FeaturesGameIndexRoute,
   FeaturesManageAccountsIndexRoute: FeaturesManageAccountsIndexRoute,
+  FeaturesProjectsIndexRoute: FeaturesProjectsIndexRoute,
+  FeaturesResearchIndexRoute: FeaturesResearchIndexRoute,
+  FeaturesTimesheetIndexRoute: FeaturesTimesheetIndexRoute,
+  FeaturesTrainingsIndexRoute: FeaturesTrainingsIndexRoute,
 }
 
 const FeaturesRouteRouteWithChildren = FeaturesRouteRoute._addFileChildren(
