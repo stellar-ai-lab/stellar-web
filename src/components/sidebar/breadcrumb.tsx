@@ -25,7 +25,7 @@ export default function HeaderBreadcrumb() {
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbPage className="flex items-center gap-2 text-muted-foreground">
-              <span className="font-bold text-primary">Stellar</span>
+              <span className="text-base font-bold text-primary">Stellar</span>
               <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" /> Home
             </BreadcrumbPage>
           </BreadcrumbItem>
@@ -50,7 +50,9 @@ export default function HeaderBreadcrumb() {
               <BreadcrumbSeparator className="hidden md:block" />
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{formatLabel(segment)}</BreadcrumbPage>
+                  <BreadcrumbPage className="text-base font-medium">
+                    {formatLabel(segment)}
+                  </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink href={href} className="hidden md:block">
                     {formatLabel(segment)}

@@ -8,10 +8,16 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  Tick01Icon,
 } from "@hugeicons/core-free-icons"
 import { useAuth } from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -64,11 +70,15 @@ export function NavUser({
               size="lg"
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground md:h-8 md:p-0"
             >
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user.avatar} alt={user.name} />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  CN
-                </AvatarFallback>
+              <Avatar className="size-7">
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="John Doe"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+                <AvatarBadge className="bg-primary">
+                  <HugeiconsIcon icon={Tick01Icon} />
+                </AvatarBadge>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
@@ -150,8 +160,9 @@ export function NavUser({
                 Cancel
               </Button>
               <Button
-                className="bg-destructive hover:bg-destructive/90"
+                // className="text-destructive hover:text-destructive/90"
                 onClick={handleSignOut}
+                variant="destructive"
               >
                 <HugeiconsIcon icon={LogOut} />
                 Sign out
