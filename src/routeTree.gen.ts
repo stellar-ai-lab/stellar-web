@@ -14,7 +14,7 @@ import { Route as FeaturesRouteRouteImport } from './routes/_features/route'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
 import { Route as FeaturesIndexRouteImport } from './routes/_features/index'
 import { Route as AuthSigninRouteImport } from './routes/auth/signin'
-import { Route as FeaturesManageAccountIndexRouteImport } from './routes/_features/manage-account/index'
+import { Route as FeaturesManageAccountsIndexRouteImport } from './routes/_features/manage-accounts/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -40,10 +40,10 @@ const AuthSigninRoute = AuthSigninRouteImport.update({
   path: '/signin',
   getParentRoute: () => AuthRouteRoute,
 } as any)
-const FeaturesManageAccountIndexRoute =
-  FeaturesManageAccountIndexRouteImport.update({
-    id: '/manage-account/',
-    path: '/manage-account/',
+const FeaturesManageAccountsIndexRoute =
+  FeaturesManageAccountsIndexRouteImport.update({
+    id: '/manage-accounts/',
+    path: '/manage-accounts/',
     getParentRoute: () => FeaturesRouteRoute,
   } as any)
 
@@ -52,13 +52,13 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/': typeof AuthIndexRoute
-  '/manage-account/': typeof FeaturesManageAccountIndexRoute
+  '/manage-accounts/': typeof FeaturesManageAccountsIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthIndexRoute
-  '/manage-account': typeof FeaturesManageAccountIndexRoute
+  '/manage-accounts': typeof FeaturesManageAccountsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +67,13 @@ export interface FileRoutesById {
   '/auth/signin': typeof AuthSigninRoute
   '/_features/': typeof FeaturesIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/_features/manage-account/': typeof FeaturesManageAccountIndexRoute
+  '/_features/manage-accounts/': typeof FeaturesManageAccountsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/auth/signin' | '/auth/' | '/manage-account/'
+  fullPaths: '/' | '/auth' | '/auth/signin' | '/auth/' | '/manage-accounts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth/signin' | '/' | '/auth' | '/manage-account'
+  to: '/auth/signin' | '/' | '/auth' | '/manage-accounts'
   id:
     | '__root__'
     | '/_features'
@@ -81,7 +81,7 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/_features/'
     | '/auth/'
-    | '/_features/manage-account/'
+    | '/_features/manage-accounts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -126,11 +126,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSigninRouteImport
       parentRoute: typeof AuthRouteRoute
     }
-    '/_features/manage-account/': {
-      id: '/_features/manage-account/'
-      path: '/manage-account'
-      fullPath: '/manage-account/'
-      preLoaderRoute: typeof FeaturesManageAccountIndexRouteImport
+    '/_features/manage-accounts/': {
+      id: '/_features/manage-accounts/'
+      path: '/manage-accounts'
+      fullPath: '/manage-accounts/'
+      preLoaderRoute: typeof FeaturesManageAccountsIndexRouteImport
       parentRoute: typeof FeaturesRouteRoute
     }
   }
@@ -138,12 +138,12 @@ declare module '@tanstack/react-router' {
 
 interface FeaturesRouteRouteChildren {
   FeaturesIndexRoute: typeof FeaturesIndexRoute
-  FeaturesManageAccountIndexRoute: typeof FeaturesManageAccountIndexRoute
+  FeaturesManageAccountsIndexRoute: typeof FeaturesManageAccountsIndexRoute
 }
 
 const FeaturesRouteRouteChildren: FeaturesRouteRouteChildren = {
   FeaturesIndexRoute: FeaturesIndexRoute,
-  FeaturesManageAccountIndexRoute: FeaturesManageAccountIndexRoute,
+  FeaturesManageAccountsIndexRoute: FeaturesManageAccountsIndexRoute,
 }
 
 const FeaturesRouteRouteWithChildren = FeaturesRouteRoute._addFileChildren(

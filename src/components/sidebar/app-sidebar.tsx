@@ -82,7 +82,7 @@ const data = {
   adminNav: [
     {
       title: "Manage Accounts",
-      url: "/manage-account",
+      url: "/manage-accounts",
       icon: <HugeiconsIcon icon={IdentityCardIcon} />,
       isActive: true,
     },
@@ -108,8 +108,6 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  // Note: I'm using state to show active item.
-  // IRL you should use the url/router.
   const navigate = useNavigate()
   const [activeItem, setActiveItem] = useState(data.navMain[0])
 

@@ -1,4 +1,6 @@
 import { useLocation } from "@tanstack/react-router"
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons"
+import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,8 +24,9 @@ export default function HeaderBreadcrumb() {
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbPage className="text-muted-foreground">
-              <span className="font-bold text-primary">Stellar</span> / Home
+            <BreadcrumbPage className="flex items-center gap-2 text-muted-foreground">
+              <span className="font-bold text-primary">Stellar</span>
+              <HugeiconsIcon icon={ArrowRight01Icon} className="size-4" /> Home
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -35,7 +38,9 @@ export default function HeaderBreadcrumb() {
     <Breadcrumb>
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href="/" className="hover:text-primary">
+            Home
+          </BreadcrumbLink>
         </BreadcrumbItem>
         {segments.map((segment, index) => {
           const href = `/${segments.slice(0, index + 1).join("/")}`
