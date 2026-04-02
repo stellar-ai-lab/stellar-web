@@ -1,6 +1,22 @@
-import * as React from "react"
-
+import { useState } from "react"
+import { useNavigate } from "@tanstack/react-router"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Separator } from "@/components/ui/separator"
 import { NavUser } from "@/components/sidebar/nav-user"
+import {
+  AiBrain01Icon,
+  ArtificialIntelligence08Icon,
+  Calendar03Icon,
+  Chart01Icon,
+  Chat01Icon,
+  Home01Icon,
+  IdentityCardIcon,
+  PuzzleIcon,
+  Saturn01Icon,
+  StartUp02Icon,
+  Target02Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons"
 import {
   Sidebar,
   SidebarContent,
@@ -12,24 +28,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {
-  AiBrain01Icon,
-  ArtificialIntelligence08Icon,
-  Calendar03Icon,
-  Chart01Icon,
-  Chat01Icon,
-  ContactIcon,
-  Home01Icon,
-  PuzzleIcon,
-  StartUp02Icon,
-  Target02Icon,
-  UserGroupIcon,
-  YogaBallIcon,
-} from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
-import { Separator } from "../ui/separator"
 
-// This is sample data
 const data = {
   user: {
     name: "shadcn",
@@ -82,9 +81,9 @@ const data = {
   ],
   adminNav: [
     {
-      title: "Contact",
-      url: "#",
-      icon: <HugeiconsIcon icon={ContactIcon} />,
+      title: "Manage Accounts",
+      url: "/manage-account",
+      icon: <HugeiconsIcon icon={IdentityCardIcon} />,
       isActive: true,
     },
     {
@@ -105,31 +104,14 @@ const data = {
       icon: <HugeiconsIcon icon={PuzzleIcon} />,
       isActive: false,
     },
-    {
-      title: "Directory",
-      url: "#",
-      icon: <HugeiconsIcon icon={UserGroupIcon} />,
-      isActive: false,
-    },
-    {
-      title: "Analytics",
-      url: "#",
-      icon: <HugeiconsIcon icon={Chart01Icon} />,
-      isActive: false,
-    },
-    {
-      title: "AI",
-      url: "#",
-      icon: <HugeiconsIcon icon={ArtificialIntelligence08Icon} />,
-      isActive: false,
-    },
   ],
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   // Note: I'm using state to show active item.
   // IRL you should use the url/router.
-  const [activeItem, setActiveItem] = React.useState(data.navMain[0])
+  const navigate = useNavigate()
+  const [activeItem, setActiveItem] = useState(data.navMain[0])
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -137,9 +119,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-              <a href="#">
+              <a href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <HugeiconsIcon icon={YogaBallIcon} className="size-5" />
+                  <HugeiconsIcon icon={Saturn01Icon} className="size-5" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">Acme Inc</span>
@@ -182,7 +164,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       children: item.title,
                       hidden: false,
                     }}
-                    onClick={() => setActiveItem(item)}
+                    onClick={() => navigate({ to: item.url })}
                     isActive={activeItem?.title === item.title}
                     className="bg-transparent px-2.5 hover:bg-chart-1/20 hover:text-primary data-[active=true]:bg-chart-1/50 data-[active=true]:text-primary md:px-2"
                   >
