@@ -9,6 +9,7 @@ import {
   UserAdd01Icon,
 } from "@hugeicons/core-free-icons"
 import CreateAccountForm from "./-create-account-form"
+import UsersTable from "./-users-table"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -62,6 +63,8 @@ function RouteComponent() {
           </Button>
         </div>
         <Separator className="w-full" />
+
+        <UsersTable />
       </div>
 
       <AlertDialogContent>
