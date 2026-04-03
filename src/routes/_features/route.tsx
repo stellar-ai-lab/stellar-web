@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import {
   Appointment01Icon,
   CalendarRemove01Icon,
-  Tick01Icon,
+  Tick02Icon,
 } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
@@ -41,7 +41,7 @@ function FeaturesLayout() {
     <SidebarProvider defaultOpen={false}>
       <AppSidebar />
       <SidebarInset>
-        <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background px-6 py-2">
+        <header className="sticky top-0 z-10 flex shrink-0 items-center gap-2 border-b bg-background px-6 py-2">
           <HeaderBreadcrumb />
           <div className="ml-auto flex items-center gap-4">
             {isClockedIn ? (
@@ -69,7 +69,7 @@ function FeaturesLayout() {
               <AvatarImage src="https://github.com/shadcn.png" alt="John Doe" />
               <AvatarFallback>CN</AvatarFallback>
               <AvatarBadge className="bg-primary">
-                <HugeiconsIcon icon={Tick01Icon} className="size-4" />
+                <HugeiconsIcon icon={Tick02Icon} className="size-4" />
               </AvatarBadge>
             </Avatar>
           </div>

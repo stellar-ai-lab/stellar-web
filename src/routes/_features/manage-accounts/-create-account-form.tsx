@@ -3,8 +3,13 @@ import { toast } from "sonner"
 import { Controller, useForm } from "react-hook-form"
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Copy01Icon, UserAdd01Icon } from "@hugeicons/core-free-icons"
+import {
+  Copy01Icon,
+  Loading03Icon,
+  UserAdd01Icon,
+} from "@hugeicons/core-free-icons"
 import { CreateAccountSchema } from "@/schemas/auth-schema"
+import { useCreateAccount } from "@/hooks/useAccounts"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -28,6 +33,8 @@ import {
 type FormData = z.infer<typeof CreateAccountSchema>
 
 export default function CreateAccountForm() {
+  const { mutate: createAccount, isPending } = useCreateAccount()
+
   const form = useForm<FormData>({
     resolver: standardSchemaResolver(CreateAccountSchema),
     defaultValues: {
@@ -36,11 +43,12 @@ export default function CreateAccountForm() {
       email: "",
       password: "",
       role: undefined,
+      status: "active",
     },
   })
 
-  const onSubmit = async (data: FormData) => {
-    console.log(data)
+  const onSubmit = (data: FormData) => {
+    createAccount(data)
   }
 
   const copyTemporaryPassword = async (value: string) => {
@@ -139,16 +147,18 @@ export default function CreateAccountForm() {
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Admin</SelectLabel>
-                        <SelectItem value="Leadership">Leadership</SelectItem>
-                        <SelectItem value="Manager">Manager</SelectItem>
-                        <SelectItem value="Dev">Platform Developer</SelectItem>
-                        <SelectItem value="Support">Support</SelectItem>
+                        <SelectItem value="leadership">Leadership</SelectItem>
+                        <SelectItem value="manager">Manager</SelectItem>
+                        <SelectItem value="developer">
+                          Platform Developer
+                        </SelectItem>
+                        <SelectItem value="support">Support</SelectItem>
                       </SelectGroup>
                       <SelectSeparator />
                       <SelectGroup>
                         <SelectLabel>Normal User</SelectLabel>
-                        <SelectItem value="Lead">Team Lead</SelectItem>
-                        <SelectItem value="IC">
+                        <SelectItem value="lead">Team Lead</SelectItem>
+                        <SelectItem value="ic">
                           Individual Contributor
                         </SelectItem>
                       </SelectGroup>
@@ -237,11 +247,23 @@ export default function CreateAccountForm() {
           type="submit"
           form="create-account-form"
           className="mt-4 w-full font-semibold"
-          disabled={form.formState.isSubmitting}
+          disabled={isPending}
           tabIndex={6}
         >
-          <HugeiconsIcon icon={UserAdd01Icon} className="size-4" />
-          Create new Account
+          {isPending ? (
+            <>
+              <HugeiconsIcon
+                icon={Loading03Icon}
+                className="size-4 animate-spin"
+              />
+              Creating account...
+            </>
+          ) : (
+            <>
+              <HugeiconsIcon icon={UserAdd01Icon} className="size-4" />
+              Create new Account
+            </>
+          )}
         </Button>
       </form>
     </div>

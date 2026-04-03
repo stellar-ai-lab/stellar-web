@@ -8,7 +8,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
-  Tick01Icon,
+  Tick02Icon,
 } from "@hugeicons/core-free-icons"
 import { useAuth } from "@/hooks/useAuth"
 import { Button } from "@/components/ui/button"
@@ -77,7 +77,7 @@ export function NavUser({
                 />
                 <AvatarFallback>CN</AvatarFallback>
                 <AvatarBadge className="bg-primary">
-                  <HugeiconsIcon icon={Tick01Icon} />
+                  <HugeiconsIcon icon={Tick02Icon} />
                 </AvatarBadge>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">

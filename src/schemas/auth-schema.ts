@@ -14,7 +14,8 @@ export const CreateAccountSchema = z.object({
     .min(8, "Password must be at least 8 characters")
     .max(20, "Password must be less than 30 characters"),
   role: z.enum(
-    ["Leadership", "Manager", "Dev", "Lead", "Support", "IC"],
-    "Please select a role",
+    ["leadership", "manager", "developer", "lead", "support", "ic"],
+    "Please select a role"
   ),
+  status: z.enum(["active", "inactive", "pending"]),
 })
