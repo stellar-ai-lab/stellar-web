@@ -1,5 +1,3 @@
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { createFileRoute } from "@tanstack/react-router"
 import {
@@ -7,19 +5,22 @@ import {
   Csv01Icon,
   GoogleGeminiIcon,
   InformationCircleIcon,
+  Pdf01Icon,
   UserAdd01Icon,
 } from "@hugeicons/core-free-icons"
+import CreateAccountForm from "./-create-account-form"
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import CreateAccountForm from "@/routes/_features/manage-accounts/create-account-form"
+  AlertDialog,
+  AlertDialogTitle,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 export const Route = createFileRoute("/_features/manage-accounts/")({
   component: RouteComponent,
@@ -27,20 +28,27 @@ export const Route = createFileRoute("/_features/manage-accounts/")({
 
 function RouteComponent() {
   return (
-    <Sheet>
+    <AlertDialog>
       <div>
         <div className="flex flex-1 flex-row flex-nowrap items-center gap-2 px-6 py-2">
-          <SheetTrigger asChild>
+          <AlertDialogTrigger asChild>
             <Button>
               <HugeiconsIcon icon={UserAdd01Icon} className="size-4" />
               Create new Account
             </Button>
-          </SheetTrigger>
-          <Button variant="secondary" className="border-border">
+          </AlertDialogTrigger>
+          <Button variant="outline">
             <HugeiconsIcon icon={Csv01Icon} className="size-4 text-green-600" />
-            Export to CSV
+            Download CSV
           </Button>
-          <Button variant="outline" className="ml-auto">
+          <Button variant="outline">
+            <HugeiconsIcon
+              icon={Pdf01Icon}
+              className="size-4 text-destructive"
+            />
+            Download PDF
+          </Button>
+          <Button variant="secondary" className="ml-auto border-border">
             <HugeiconsIcon
               icon={InformationCircleIcon}
               className="size-4 text-muted-foreground"
@@ -56,27 +64,21 @@ function RouteComponent() {
         <Separator className="w-full" />
       </div>
 
-      <SheetContent className="min-w-md" side="right">
-        <SheetHeader>
-          <SheetTitle className="text-base font-medium text-primary">
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-base font-medium text-primary">
             Create new Account
-          </SheetTitle>
-          <SheetDescription className="text-sm/relaxed text-muted-foreground">
+          </AlertDialogTitle>
+          <AlertDialogDescription>
             By creating this account, you’ll be set as the creator. Managers
             will have permission to manage and update this account.
-          </SheetDescription>
-        </SheetHeader>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <CreateAccountForm />
-        <SheetFooter>
-          <Button>
-            <HugeiconsIcon icon={UserAdd01Icon} className="size-4" />
-            Create new Account
-          </Button>
-          <SheetClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="w-full">Cancel</AlertDialogCancel>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
