@@ -79,14 +79,14 @@ const data = {
   ],
   adminNav: [
     {
-      title: "Announcement",
-      url: "/announcement",
-      icon: <HugeiconsIcon icon={Megaphone03Icon} />,
-    },
-    {
       title: "Manage Accounts",
       url: "/manage-accounts",
       icon: <HugeiconsIcon icon={IdentityCardIcon} />,
+    },
+    {
+      title: "Announcement",
+      url: "/announcement",
+      icon: <HugeiconsIcon icon={Megaphone03Icon} />,
     },
     {
       title: "Projects",
@@ -119,11 +119,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
               <a href="/">
                 <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <HugeiconsIcon icon={Saturn01Icon} className="size-5" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
+                  <HugeiconsIcon
+                    icon={Saturn01Icon}
+                    className="size-5"
+                    strokeWidth={2}
+                  />
                 </div>
               </a>
             </SidebarMenuButton>

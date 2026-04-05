@@ -260,7 +260,7 @@ export default function UsersTable() {
               <TableHead>
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={UserIcon} className="size-4" />
-                  Account Details
+                  User Information
                 </div>
               </TableHead>
               <TableHead>
