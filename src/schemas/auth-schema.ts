@@ -6,8 +6,6 @@ export const LoginSchema = z.object({
 })
 
 export const CreateAccountSchema = z.object({
-  first_name: z.string().min(1, "First name is required"),
-  last_name: z.string().min(1, "Last name is required"),
   email: z.email({ message: "Invalid email address" }),
   password: z
     .string()
@@ -17,5 +15,4 @@ export const CreateAccountSchema = z.object({
     ["leadership", "manager", "developer", "lead", "support", "ic"],
     "Please select a role"
   ),
-  status: z.enum(["active", "inactive", "pending"]),
 })

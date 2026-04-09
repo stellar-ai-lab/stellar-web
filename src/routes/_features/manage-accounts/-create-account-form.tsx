@@ -32,23 +32,26 @@ import {
 
 type FormData = z.infer<typeof CreateAccountSchema>
 
-export default function CreateAccountForm() {
+interface CreateAccountFormProps {
+  onSuccess?: () => void
+}
+
+export default function CreateAccountForm({
+  onSuccess,
+}: CreateAccountFormProps) {
   const { mutate: createAccount, isPending } = useCreateAccount()
 
   const form = useForm<FormData>({
     resolver: standardSchemaResolver(CreateAccountSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
       email: "",
       password: "",
       role: undefined,
-      status: "active",
     },
   })
 
   const onSubmit = (data: FormData) => {
-    createAccount(data)
+    createAccount(data, { onSuccess })
   }
 
   const copyTemporaryPassword = async (value: string) => {
@@ -72,55 +75,10 @@ export default function CreateAccountForm() {
   }
 
   return (
-    <div className="mt-4">
+    <div className="mt-2">
       <form id="create-account-form" onSubmit={form.handleSubmit(onSubmit)}>
         <FieldSet>
           <FieldGroup>
-            <div className="flex flex-row flex-nowrap gap-2">
-              <Controller
-                name="first_name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field>
-                    <FieldLabel htmlFor="first_name">First Name</FieldLabel>
-                    <Input
-                      {...field}
-                      id="first_name"
-                      autoComplete="first_name"
-                      placeholder="User first name"
-                      aria-invalid={fieldState.invalid}
-                      autoFocus
-                      tabIndex={1}
-                    />
-                    {fieldState.error && (
-                      <FieldError>{fieldState.error.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
-
-              <Controller
-                name="last_name"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field>
-                    <FieldLabel htmlFor="last_name">Last Name</FieldLabel>
-                    <Input
-                      {...field}
-                      id="last_name"
-                      autoComplete="last_name"
-                      placeholder="User last name"
-                      aria-invalid={fieldState.invalid}
-                      tabIndex={2}
-                    />
-                    {fieldState.error && (
-                      <FieldError>{fieldState.error.message}</FieldError>
-                    )}
-                  </Field>
-                )}
-              />
-            </div>
-
             <Controller
               name="role"
               control={form.control}
@@ -138,9 +96,10 @@ export default function CreateAccountForm() {
                     <SelectTrigger
                       id="role"
                       ref={field.ref}
-                      className="w-full max-w-48"
+                      className="w-full max-w-45"
                       aria-invalid={fieldState.invalid}
-                      tabIndex={3}
+                      autoFocus
+                      tabIndex={1}
                     >
                       <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
@@ -183,7 +142,7 @@ export default function CreateAccountForm() {
                     autoComplete="email"
                     placeholder="Enter account email"
                     aria-invalid={fieldState.invalid}
-                    tabIndex={4}
+                    tabIndex={2}
                   />
                   {fieldState.error && (
                     <FieldError>{fieldState.error.message}</FieldError>
@@ -221,7 +180,7 @@ export default function CreateAccountForm() {
                       placeholder="User temporary password"
                       aria-invalid={fieldState.invalid}
                       maxLength={30}
-                      tabIndex={5}
+                      tabIndex={3}
                     />
 
                     <Button
@@ -248,7 +207,7 @@ export default function CreateAccountForm() {
           form="create-account-form"
           className="mt-4 w-full font-semibold"
           disabled={isPending}
-          tabIndex={6}
+          tabIndex={4}
         >
           {isPending ? (
             <>

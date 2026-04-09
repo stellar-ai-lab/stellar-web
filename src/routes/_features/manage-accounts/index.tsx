@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { createFileRoute } from "@tanstack/react-router"
 import {
@@ -28,8 +29,10 @@ export const Route = createFileRoute("/_features/manage-accounts/")({
 })
 
 function RouteComponent() {
+  const [open, setOpen] = useState<boolean>(false)
+
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <div>
         <div className="flex flex-1 flex-row flex-nowrap items-center gap-2 px-6 py-2">
           <AlertDialogTrigger asChild>
@@ -77,7 +80,7 @@ function RouteComponent() {
             will have permission to manage and update this account.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        <CreateAccountForm />
+        <CreateAccountForm onSuccess={() => setOpen(false)} />
         <AlertDialogFooter>
           <AlertDialogCancel className="w-full">Cancel</AlertDialogCancel>
         </AlertDialogFooter>
