@@ -1,6 +1,10 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { clockIn, getTodayAttendanceStatus } from "@/services/attendanceService"
 import { toast } from "sonner"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  clockIn,
+  clockOut,
+  getTodayAttendanceStatus,
+} from "@/services/attendanceService"
 
 export const attendanceKeys = {
   all: ["attendance"] as const,
@@ -25,6 +29,21 @@ export function useClockIn() {
     },
     onError: (error: Error) => {
       toast.error(error.message ?? "Failed to clock in")
+    },
+  })
+}
+
+export function useClockOut() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: clockOut,
+    onSuccess: () => {
+      toast.success("Clocked out successfully")
+      queryClient.invalidateQueries({ queryKey: attendanceKeys.todayStatus() })
+    },
+    onError: (error: Error) => {
+      toast.error(error.message ?? "Failed to clock out")
     },
   })
 }
