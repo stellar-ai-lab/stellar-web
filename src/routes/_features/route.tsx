@@ -1,22 +1,24 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  Appointment01Icon,
+  CalendarRemove01Icon,
+  Loading03Icon,
+  Tick02Icon,
+} from "@hugeicons/core-free-icons"
 import { supabase } from "@/lib/supabase"
+import { useClockIn, useTodayAttendanceStatus } from "@/hooks/useAttendance"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
 import HeaderBreadcrumb from "@/components/sidebar/breadcrumb"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
-import {
-  Appointment01Icon,
-  CalendarRemove01Icon,
-  Tick02Icon,
-} from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
+import { Skeleton } from "@/components/ui/skeleton"
 import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
-import { useState } from "react"
 
 export const Route = createFileRoute("/_features")({
   beforeLoad: async () => {
@@ -33,9 +35,12 @@ export const Route = createFileRoute("/_features")({
   component: FeaturesLayout,
 })
 
-// TODO: implement clock in/out functionality
 function FeaturesLayout() {
-  const [isClockedIn, setIsClockedIn] = useState<boolean>(false)
+  const { data: attendanceStatus, isLoading } = useTodayAttendanceStatus()
+  const { mutate: clockInMutation, isPending: isClockingIn } = useClockIn()
+
+  const canClockIn = attendanceStatus?.can_clock_in ?? false
+  const canClockOut = attendanceStatus?.can_clock_out ?? false
 
   return (
     <SidebarProvider defaultOpen={false}>
@@ -44,25 +49,29 @@ function FeaturesLayout() {
         <header className="sticky top-0 z-10 flex shrink-0 items-center gap-2 border-b bg-background px-6 py-2">
           <HeaderBreadcrumb />
           <div className="ml-auto flex items-center gap-4">
-            {isClockedIn ? (
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  setIsClockedIn(!isClockedIn)
-                }}
-              >
+            {isLoading ? (
+              <Skeleton className="h-6 w-24 rounded-sm" />
+            ) : canClockOut && !canClockIn ? (
+              <Button variant="destructive">
                 <HugeiconsIcon icon={CalendarRemove01Icon} className="size-4" />
                 Clock Out
               </Button>
             ) : (
               <Button
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => {
-                  setIsClockedIn(!isClockedIn)
-                }}
+                className="bg-green-600 hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-600 disabled:opacity-50"
+                disabled={(!canClockIn && !canClockOut) || isClockingIn}
+                onClick={() => clockInMutation()}
               >
-                <HugeiconsIcon icon={Appointment01Icon} className="size-4" />
-                Clock In
+                {isClockingIn ? (
+                  <HugeiconsIcon
+                    icon={Loading03Icon}
+                    strokeWidth={2}
+                    className="size-4 animate-spin"
+                  />
+                ) : (
+                  <HugeiconsIcon icon={Appointment01Icon} className="size-4" />
+                )}
+                {isClockingIn ? "Clocking in..." : "Clock In"}
               </Button>
             )}
             <Avatar className="size-7">
