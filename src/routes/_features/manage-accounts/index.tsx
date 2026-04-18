@@ -34,7 +34,7 @@ function RouteComponent() {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <div>
-        <div className="flex flex-1 flex-row flex-nowrap items-center gap-2 px-6 py-2">
+        <div className="flex flex-1 flex-row flex-nowrap gap-2 px-6 py-2">
           <AlertDialogTrigger asChild>
             <Button>
               <HugeiconsIcon icon={UserAdd01Icon} className="size-4" />
