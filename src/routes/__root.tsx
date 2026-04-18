@@ -32,7 +32,7 @@ export const Route = createRootRoute({
         content: "width=device-width, initial-scale=1",
       },
       {
-        title: "TanStack Start Starter",
+        title: "Stellar - Team management platform from the future",
       },
     ],
     links: [
