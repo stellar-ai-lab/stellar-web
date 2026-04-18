@@ -50,11 +50,11 @@ export async function clockIn(): Promise<ClockInResponse> {
   return res.json()
 }
 
-export async function clockOut(note: string): Promise<ClockOutResponse> {
+export async function clockOut(notes: string): Promise<ClockOutResponse> {
   const res = await apiFetch("/attendance/clock-out", {
     method: "PATCH",
     body: JSON.stringify({
-      note: note,
+      notes: notes,
     }),
   })
 
