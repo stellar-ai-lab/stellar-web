@@ -24,7 +24,7 @@ import { Route as FeaturesEngagementsIndexRouteImport } from './routes/_features
 import { Route as FeaturesDirectoryIndexRouteImport } from './routes/_features/directory/index'
 import { Route as FeaturesAnnouncementIndexRouteImport } from './routes/_features/announcement/index'
 import { Route as FeaturesAnalyticsIndexRouteImport } from './routes/_features/analytics/index'
-import { Route as FeaturesAiIndexRouteImport } from './routes/_features/ai/index'
+import { Route as FeaturesAiWorkflowsIndexRouteImport } from './routes/_features/ai-workflows/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
   id: '/auth',
@@ -103,18 +103,19 @@ const FeaturesAnalyticsIndexRoute = FeaturesAnalyticsIndexRouteImport.update({
   path: '/analytics/',
   getParentRoute: () => FeaturesRouteRoute,
 } as any)
-const FeaturesAiIndexRoute = FeaturesAiIndexRouteImport.update({
-  id: '/ai/',
-  path: '/ai/',
-  getParentRoute: () => FeaturesRouteRoute,
-} as any)
+const FeaturesAiWorkflowsIndexRoute =
+  FeaturesAiWorkflowsIndexRouteImport.update({
+    id: '/ai-workflows/',
+    path: '/ai-workflows/',
+    getParentRoute: () => FeaturesRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
   '/auth/signin': typeof AuthSigninRoute
   '/auth/': typeof AuthIndexRoute
-  '/ai/': typeof FeaturesAiIndexRoute
+  '/ai-workflows/': typeof FeaturesAiWorkflowsIndexRoute
   '/analytics/': typeof FeaturesAnalyticsIndexRoute
   '/announcement/': typeof FeaturesAnnouncementIndexRoute
   '/directory/': typeof FeaturesDirectoryIndexRoute
@@ -130,7 +131,7 @@ export interface FileRoutesByTo {
   '/auth/signin': typeof AuthSigninRoute
   '/': typeof FeaturesIndexRoute
   '/auth': typeof AuthIndexRoute
-  '/ai': typeof FeaturesAiIndexRoute
+  '/ai-workflows': typeof FeaturesAiWorkflowsIndexRoute
   '/analytics': typeof FeaturesAnalyticsIndexRoute
   '/announcement': typeof FeaturesAnnouncementIndexRoute
   '/directory': typeof FeaturesDirectoryIndexRoute
@@ -149,7 +150,7 @@ export interface FileRoutesById {
   '/auth/signin': typeof AuthSigninRoute
   '/_features/': typeof FeaturesIndexRoute
   '/auth/': typeof AuthIndexRoute
-  '/_features/ai/': typeof FeaturesAiIndexRoute
+  '/_features/ai-workflows/': typeof FeaturesAiWorkflowsIndexRoute
   '/_features/analytics/': typeof FeaturesAnalyticsIndexRoute
   '/_features/announcement/': typeof FeaturesAnnouncementIndexRoute
   '/_features/directory/': typeof FeaturesDirectoryIndexRoute
@@ -168,7 +169,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/auth/signin'
     | '/auth/'
-    | '/ai/'
+    | '/ai-workflows/'
     | '/analytics/'
     | '/announcement/'
     | '/directory/'
@@ -184,7 +185,7 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/'
     | '/auth'
-    | '/ai'
+    | '/ai-workflows'
     | '/analytics'
     | '/announcement'
     | '/directory'
@@ -202,7 +203,7 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/_features/'
     | '/auth/'
-    | '/_features/ai/'
+    | '/_features/ai-workflows/'
     | '/_features/analytics/'
     | '/_features/announcement/'
     | '/_features/directory/'
@@ -327,11 +328,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FeaturesAnalyticsIndexRouteImport
       parentRoute: typeof FeaturesRouteRoute
     }
-    '/_features/ai/': {
-      id: '/_features/ai/'
-      path: '/ai'
-      fullPath: '/ai/'
-      preLoaderRoute: typeof FeaturesAiIndexRouteImport
+    '/_features/ai-workflows/': {
+      id: '/_features/ai-workflows/'
+      path: '/ai-workflows'
+      fullPath: '/ai-workflows/'
+      preLoaderRoute: typeof FeaturesAiWorkflowsIndexRouteImport
       parentRoute: typeof FeaturesRouteRoute
     }
   }
@@ -339,7 +340,7 @@ declare module '@tanstack/react-router' {
 
 interface FeaturesRouteRouteChildren {
   FeaturesIndexRoute: typeof FeaturesIndexRoute
-  FeaturesAiIndexRoute: typeof FeaturesAiIndexRoute
+  FeaturesAiWorkflowsIndexRoute: typeof FeaturesAiWorkflowsIndexRoute
   FeaturesAnalyticsIndexRoute: typeof FeaturesAnalyticsIndexRoute
   FeaturesAnnouncementIndexRoute: typeof FeaturesAnnouncementIndexRoute
   FeaturesDirectoryIndexRoute: typeof FeaturesDirectoryIndexRoute
@@ -354,7 +355,7 @@ interface FeaturesRouteRouteChildren {
 
 const FeaturesRouteRouteChildren: FeaturesRouteRouteChildren = {
   FeaturesIndexRoute: FeaturesIndexRoute,
-  FeaturesAiIndexRoute: FeaturesAiIndexRoute,
+  FeaturesAiWorkflowsIndexRoute: FeaturesAiWorkflowsIndexRoute,
   FeaturesAnalyticsIndexRoute: FeaturesAnalyticsIndexRoute,
   FeaturesAnnouncementIndexRoute: FeaturesAnnouncementIndexRoute,
   FeaturesDirectoryIndexRoute: FeaturesDirectoryIndexRoute,

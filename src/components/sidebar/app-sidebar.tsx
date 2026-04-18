@@ -72,8 +72,8 @@ const data = {
       icon: <HugeiconsIcon icon={Chart01Icon} />,
     },
     {
-      title: "Artificial Intelligence",
-      url: "/ai",
+      title: "AI Workflows",
+      url: "/ai-workflows",
       icon: <HugeiconsIcon icon={ArtificialIntelligence08Icon} />,
     },
   ],
