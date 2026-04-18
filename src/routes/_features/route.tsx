@@ -1,5 +1,8 @@
+import * as z from "zod"
 import { useState } from "react"
+import { Controller, useForm } from "react-hook-form"
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router"
+import { standardSchemaResolver } from "@hookform/resolvers/standard-schema"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Appointment01Icon,
@@ -13,9 +16,11 @@ import {
   useClockOut,
   useTodayAttendanceStatus,
 } from "@/hooks/useAttendance"
+import { ClockOutSchema } from "@/schemas/attendance-schema"
 import { AppSidebar } from "@/components/sidebar/app-sidebar"
 import HeaderBreadcrumb from "@/components/sidebar/breadcrumb"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
@@ -25,8 +30,15 @@ import {
   AvatarImage,
 } from "@/components/ui/avatar"
 import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldSet,
+} from "@/components/ui/field"
+import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -35,7 +47,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Textarea } from "@/components/ui/textarea"
+
+type FormData = z.infer<typeof ClockOutSchema>
 
 export const Route = createFileRoute("/_features")({
   beforeLoad: async () => {
@@ -61,8 +74,31 @@ function FeaturesLayout() {
   const canClockIn = attendanceStatus?.can_clock_in ?? false
   const canClockOut = attendanceStatus?.can_clock_out ?? false
 
+  const form = useForm<FormData>({
+    resolver: standardSchemaResolver(ClockOutSchema),
+    defaultValues: {
+      notes: "",
+    },
+  })
+
+  const onSubmit = (data: FormData) => {
+    clockOutMutation(data.notes ?? "", {
+      onSuccess: () => {
+        setOpen(false)
+        form.reset({ notes: "" })
+      },
+    })
+  }
+
+  const handleClockOutDialogOpenChange = (next: boolean) => {
+    setOpen(next)
+    if (!next) {
+      form.reset({ notes: "" })
+    }
+  }
+
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog open={open} onOpenChange={handleClockOutDialogOpenChange}>
       <SidebarProvider defaultOpen={false}>
         <AppSidebar />
         <SidebarInset>
@@ -127,26 +163,59 @@ function FeaturesLayout() {
             You will not be able to clock in again until the next day.
           </AlertDialogDescription>
         </AlertDialogHeader>
-        {/* TODO: make this a form with a textarea and a button to submit the note */}
-        <Textarea placeholder="Add a note to let your AI agent know what did you to today to add it in your actuals for the day." />
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
+        <form id="clock-out-form" onSubmit={form.handleSubmit(onSubmit)}>
+          <FieldSet>
+            <FieldGroup>
+              <Controller
+                name="notes"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field>
+                    <FieldLabel htmlFor="notes">Notes</FieldLabel>
+                    <Textarea
+                      {...field}
+                      id="notes"
+                      placeholder="What did you work on today?"
+                      aria-invalid={fieldState.invalid}
+                      maxLength={200}
+                      autoFocus
+                    />
+                    {fieldState.error && (
+                      <FieldError>{fieldState.error.message}</FieldError>
+                    )}
+                    <FieldDescription className="italic">
+                      This note is saved with your clock-out record. It can be
+                      used by the AI agent workflow when drafting weekly
+                      actuals.
+                    </FieldDescription>
+                  </Field>
+                )}
+              />
+            </FieldGroup>
+          </FieldSet>
+
+          <Button
+            type="submit"
+            form="clock-out-form"
             variant="destructive"
-            onClick={() => clockOutMutation("test note")}
+            className="mt-4 w-full"
             disabled={isClockingOut}
           >
             {isClockingOut ? (
-              <HugeiconsIcon
-                icon={Loading03Icon}
-                strokeWidth={2}
-                className="size-4 animate-spin"
-              />
+              <>
+                <HugeiconsIcon
+                  icon={Loading03Icon}
+                  className="size-4 animate-spin"
+                />
+                Clocking out...
+              </>
             ) : (
-              <HugeiconsIcon icon={CalendarRemove01Icon} className="size-4" />
+              "Clock out"
             )}
-            Clock Out
-          </AlertDialogAction>
+          </Button>
+        </form>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="w-full">Cancel</AlertDialogCancel>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
