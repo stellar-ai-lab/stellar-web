@@ -38,7 +38,7 @@ function RouteComponent() {
           <AlertDialogTrigger asChild>
             <Button>
               <HugeiconsIcon icon={UserAdd01Icon} className="size-4" />
-              Create new Account
+              Create Account
             </Button>
           </AlertDialogTrigger>
           <Button variant="outline">
@@ -73,7 +73,7 @@ function RouteComponent() {
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className="text-base font-medium text-primary">
-            Create new Account
+            Create Account
           </AlertDialogTitle>
           <AlertDialogDescription>
             By creating this account, you’ll be set as the creator. Managers
