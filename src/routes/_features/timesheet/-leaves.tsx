@@ -55,7 +55,7 @@ export default function Leaves() {
   const form = useForm<FormData>({
     resolver: standardSchemaResolver(LeaveRequestSchema),
     defaultValues: {
-      leave_type: undefined,
+      leave_type: "" as FormData["leave_type"],
       start_date: "",
       end_date: "",
       reason: "",
@@ -99,7 +99,7 @@ export default function Leaves() {
                   control={form.control}
                   render={({ field, fieldState }) => (
                     <Field>
-                      <FieldLabel htmlFor="leave-type">Leave Type</FieldLabel>
+                      <FieldLabel htmlFor="leave_type">Leave Type</FieldLabel>
                       <Select
                         name={field.name}
                         value={field.value}
