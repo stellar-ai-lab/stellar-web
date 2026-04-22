@@ -6,18 +6,21 @@ import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Calendar03Icon,
   FilterIcon,
+  Loading03Icon,
   PlusSignIcon,
 } from "@hugeicons/core-free-icons"
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema"
 import { LeaveRequestSchema } from "@/schemas/attendance-schema"
+import { useApprovers, useCreateLeaveRequest } from "@/hooks/useLeave"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Textarea } from "@/components/ui/textarea"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import { Textarea } from "@/components/ui/textarea"
 import {
   Field,
   FieldError,
@@ -48,9 +51,17 @@ import {
 
 type FormData = z.infer<typeof LeaveRequestSchema>
 
-export default function Leaves() {
+type LeavesProps = {
+  isActive: boolean
+}
+
+export default function Leaves({ isActive: _isActive }: LeavesProps) {
+  const [sheetOpen, setSheetOpen] = useState(false)
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
+
+  const { data: approvers = [], isPending: approversLoading } =
+    useApprovers(sheetOpen)
 
   const form = useForm<FormData>({
     resolver: standardSchemaResolver(LeaveRequestSchema),
@@ -58,16 +69,25 @@ export default function Leaves() {
       leave_type: "" as FormData["leave_type"],
       start_date: "",
       end_date: "",
+      approver: "",
       reason: "",
     },
   })
 
+  const { mutate: submitLeave, isPending: isSubmitting } =
+    useCreateLeaveRequest(() => {
+      setSheetOpen(false)
+      form.reset()
+      setStartDate(undefined)
+      setEndDate(undefined)
+    })
+
   const onSubmit = (data: FormData) => {
-    console.log(data)
+    submitLeave(data)
   }
 
   return (
-    <Sheet>
+    <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
       <div className="px-6 py-4">
         <div className="flex flex-row flex-nowrap gap-2">
           <SheetTrigger asChild>
@@ -115,7 +135,7 @@ export default function Leaves() {
                           aria-invalid={fieldState.invalid}
                           autoFocus
                         >
-                          <SelectValue placeholder="Select leave" />
+                          <SelectValue placeholder="Select leave type" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
@@ -246,6 +266,70 @@ export default function Leaves() {
                 />
 
                 <Controller
+                  name="approver"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field>
+                      <FieldLabel htmlFor="approver">Approver</FieldLabel>
+                      <Select
+                        name={field.name}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        onOpenChange={(open) => {
+                          if (!open) field.onBlur()
+                        }}
+                        disabled={approversLoading}
+                      >
+                        <SelectTrigger
+                          id="approver"
+                          ref={field.ref}
+                          className="w-full"
+                          aria-invalid={fieldState.invalid}
+                        >
+                          <SelectValue
+                            placeholder={
+                              approversLoading
+                                ? "Loading approvers..."
+                                : "Select approver"
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {approvers.map((approver) => (
+                            <SelectItem
+                              key={approver.user_id}
+                              value={approver.user_id}
+                            >
+                              <div className="flex items-center gap-2">
+                                <Avatar size="sm">
+                                  <AvatarImage
+                                    src={approver.avatar_url ?? undefined}
+                                    alt={`${approver.first_name} ${approver.last_name}`}
+                                  />
+                                  <AvatarFallback>
+                                    {approver.first_name[0]}
+                                    {approver.last_name[0]}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <span>
+                                  {approver.first_name} {approver.last_name}
+                                </span>
+                                <span className="text-muted-foreground">
+                                  · {approver.job_title}
+                                </span>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      {fieldState.error && (
+                        <FieldError>{fieldState.error.message}</FieldError>
+                      )}
+                    </Field>
+                  )}
+                />
+
+                <Controller
                   name="reason"
                   control={form.control}
                   render={({ field, fieldState }) => (
@@ -269,11 +353,23 @@ export default function Leaves() {
             </FieldSet>
           </div>
           <SheetFooter>
-            <Button type="submit" form="leave-request-form">
-              Submit Request
+            <Button
+              type="submit"
+              form="leave-request-form"
+              disabled={isSubmitting}
+            >
+              {isSubmitting && (
+                <HugeiconsIcon
+                  icon={Loading03Icon}
+                  className="size-4 animate-spin"
+                />
+              )}
+              {isSubmitting ? "Submitting..." : "Submit Request"}
             </Button>
             <SheetClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline" disabled={isSubmitting}>
+                Cancel
+              </Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

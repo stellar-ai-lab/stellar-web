@@ -34,6 +34,7 @@ export const LeaveRequestSchema = z
       .refine((date) => new Date(date) >= manilaDate(-1), {
         message: "End date cannot be earlier than yesterday",
       }),
+    approver: z.uuid({ message: "Please select an approver" }),
     reason: z
       .string()
       .trim()

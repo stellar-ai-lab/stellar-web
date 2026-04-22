@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { createFileRoute } from "@tanstack/react-router"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
@@ -20,9 +21,11 @@ export const Route = createFileRoute("/_features/timesheet/")({
 })
 
 function RouteComponent() {
+  const [activeTab, setActiveTab] = useState<string>("overview")
+
   return (
     <div>
-      <Tabs defaultValue="overview" className="gap-y-0">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="gap-y-0">
         <TabsList variant="line" className="h-10! px-6">
           <TabsTrigger
             value="overview"
@@ -73,7 +76,7 @@ function RouteComponent() {
         </TabsContent>
 
         <TabsContent value="leaves">
-          <Leaves />
+          <Leaves isActive={activeTab === "leaves"} />
         </TabsContent>
 
         <TabsContent value="actuals">
