@@ -182,7 +182,9 @@ export default function Leaves() {
                               }
                             }}
                             defaultMonth={startDate}
-                            disabled={{ before: new Date() }}
+                            disabled={{
+                              before: new Date(Date.now() - 864e5),
+                            }}
                           />
                         </PopoverContent>
                       </Popover>
@@ -230,7 +232,9 @@ export default function Leaves() {
                               )
                             }}
                             defaultMonth={endDate ?? startDate}
-                            disabled={{ before: startDate ?? new Date() }}
+                            disabled={{
+                              before: startDate ?? new Date(Date.now() - 864e5),
+                            }}
                           />
                         </PopoverContent>
                       </Popover>

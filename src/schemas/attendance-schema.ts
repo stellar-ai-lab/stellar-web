@@ -8,11 +8,13 @@ export const ClockOutSchema = z.object({
     .max(200, { message: "Notes must be less than 200 characters" }),
 })
 
-const today = () => {
+const manilaDate = (offsetDays = 0) => {
   const manilaDateStr = new Date().toLocaleDateString("en-CA", {
     timeZone: "Asia/Manila",
   })
-  return new Date(`${manilaDateStr}T00:00:00`)
+  const d = new Date(`${manilaDateStr}T00:00:00`)
+  d.setDate(d.getDate() + offsetDays)
+  return d
 }
 
 export const LeaveRequestSchema = z
@@ -23,14 +25,14 @@ export const LeaveRequestSchema = z
     start_date: z
       .string({ message: "Start date is required" })
       .min(1, { message: "Start date is required" })
-      .refine((date) => new Date(date) >= today(), {
-        message: "Start date must be today or in the future",
+      .refine((date) => new Date(date) >= manilaDate(-1), {
+        message: "Start date cannot be earlier than yesterday",
       }),
     end_date: z
       .string({ message: "End date is required" })
       .min(1, { message: "End date is required" })
-      .refine((date) => new Date(date) >= today(), {
-        message: "End date must be today or in the future",
+      .refine((date) => new Date(date) >= manilaDate(-1), {
+        message: "End date cannot be earlier than yesterday",
       }),
     reason: z
       .string()
