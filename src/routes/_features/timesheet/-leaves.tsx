@@ -12,6 +12,7 @@ import {
 import { standardSchemaResolver } from "@hookform/resolvers/standard-schema"
 import { LeaveRequestSchema } from "@/schemas/attendance-schema"
 import { useApprovers, useCreateLeaveRequest } from "@/hooks/useLeave"
+import LeavesHistory from "./-leaves-history"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import { Textarea } from "@/components/ui/textarea"
@@ -55,8 +56,9 @@ type LeavesProps = {
   isActive: boolean
 }
 
+// TODO: Display leave history and request history
 export default function Leaves({ isActive: _isActive }: LeavesProps) {
-  const [sheetOpen, setSheetOpen] = useState(false)
+  const [sheetOpen, setSheetOpen] = useState<boolean>(false)
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
   const [endDate, setEndDate] = useState<Date | undefined>(undefined)
 
@@ -88,18 +90,26 @@ export default function Leaves({ isActive: _isActive }: LeavesProps) {
 
   return (
     <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <div className="px-6 py-4">
-        <div className="flex flex-row flex-nowrap gap-2">
-          <SheetTrigger asChild>
-            <Button>
-              <HugeiconsIcon icon={PlusSignIcon} className="size-4" />
-              New Leave Request
+      <div className="flex h-[calc(100svh-94px)] overflow-hidden">
+        {/* left content - list of all leaves */}
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto px-6 py-4">
+          <div className="flex flex-row flex-nowrap gap-2">
+            <SheetTrigger asChild>
+              <Button>
+                <HugeiconsIcon icon={PlusSignIcon} className="size-4" />
+                New Leave Request
+              </Button>
+            </SheetTrigger>
+            <Button variant="outline">
+              <HugeiconsIcon icon={FilterIcon} className="size-4" />
+              Filter
             </Button>
-          </SheetTrigger>
-          <Button variant="outline">
-            <HugeiconsIcon icon={FilterIcon} className="size-4" />
-            Filter
-          </Button>
+          </div>
+        </div>
+
+        {/* right content - history of requests */}
+        <div className="w-110 shrink-0 overflow-y-auto border-l px-6">
+          <LeavesHistory />
         </div>
       </div>
 
