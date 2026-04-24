@@ -41,6 +41,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useQueryClient } from "@tanstack/react-query"
 
 export function NavUser({
   user,
@@ -54,9 +55,11 @@ export function NavUser({
   const { signOut } = useAuth()
   const navigate = useNavigate()
   const { isMobile } = useSidebar()
+  const queryClient = useQueryClient()
   const [isSignOutDialogOpen, setIsSignOutDialogOpen] = useState<boolean>(false)
 
   const handleSignOut = async () => {
+    queryClient.clear()
     await signOut()
     navigate({ to: "/auth/signin" })
   }
