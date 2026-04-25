@@ -5,7 +5,9 @@ import { Controller, useForm } from "react-hook-form"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Calendar03Icon,
+  ChatIcon,
   FilterIcon,
+  GoogleGeminiIcon,
   Loading03Icon,
   PlusSignIcon,
 } from "@hugeicons/core-free-icons"
@@ -100,9 +102,14 @@ export default function Leaves({ isActive: _isActive }: LeavesProps) {
                 New Leave Request
               </Button>
             </SheetTrigger>
-            <Button variant="outline">
+            <Button variant="outline" className="ml-auto">
               <HugeiconsIcon icon={FilterIcon} className="size-4" />
               Filter
+            </Button>
+            <Button className="bg-chart-2 text-muted">
+              <HugeiconsIcon icon={ChatIcon} className="size-4" />
+              Chat with Astra
+              <HugeiconsIcon icon={GoogleGeminiIcon} className="size-4" />
             </Button>
           </div>
         </div>
