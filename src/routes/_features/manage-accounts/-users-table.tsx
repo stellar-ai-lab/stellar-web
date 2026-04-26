@@ -1,4 +1,14 @@
+import { toast } from "sonner"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -11,6 +21,7 @@ import {
   Briefcase04Icon,
   Calendar04Icon,
   DashedLineCircleIcon,
+  Ellipsis,
   StudentCardIcon,
   UserGroupIcon,
   UserIcon,
@@ -247,41 +258,94 @@ function formatDate(iso: string) {
   })
 }
 
+function UserRowActions({ user }: { user: User }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon-sm"
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <span className="sr-only">Open actions for {user.name}</span>
+          <HugeiconsIcon icon={Ellipsis} className="size-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          onSelect={() => {
+            void navigator.clipboard
+              .writeText(String(user.id))
+              .then(() => toast.success("User ID copied"))
+              .catch(() => toast.error("Could not copy"))
+          }}
+        >
+          Copy user ID
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onSelect={() => {
+            void navigator.clipboard
+              .writeText(user.email)
+              .then(() => toast.success("Email copied"))
+              .catch(() => toast.error("Could not copy"))
+          }}
+        >
+          Copy email
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={() => toast.message("View profile")}>
+          View profile
+        </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => toast.message("Edit account")}>
+          Edit account
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          variant="destructive"
+          onSelect={() => toast.message("Deactivate user")}
+        >
+          Deactivate
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 export default function UsersTable() {
   return (
     <div className="px-6 py-4">
       <div className="rounded-sm border">
-        <Table>
-          <TableHeader className="bg-muted">
-            <TableRow>
-              <TableHead className="w-8 pl-6">
-                <span className="sr-only">User</span>
-              </TableHead>
-              <TableHead>
+        <Table className="[&_td]:border-r [&_th]:border-r [&_td:last-child]:border-r-0 [&_th:last-child]:border-r-0">
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="pl-6 text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={UserIcon} className="size-4" />
-                  User Information
+                  Name
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="text-muted-foreground">
+                Email
+              </TableHead>
+              <TableHead className="text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={Briefcase04Icon} className="size-4" />
                   Position
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={UserGroupIcon} className="size-4" />
                   Team
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={StudentCardIcon} className="size-4" />
                   Role
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="text-muted-foreground">
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon
                     icon={DashedLineCircleIcon}
@@ -290,17 +354,20 @@ export default function UsersTable() {
                   Status
                 </div>
               </TableHead>
-              <TableHead>
+              <TableHead className="text-muted-foreground">
                 <div className="flex items-center justify-center gap-1.5">
                   <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
                   Date Joined
                 </div>
               </TableHead>
-              <TableHead className="pr-6">
+              <TableHead className="pr-6 text-muted-foreground">
                 <div className="flex items-center justify-center gap-1.5">
                   <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
                   Last Updated
                 </div>
+              </TableHead>
+              <TableHead className="w-12 pr-6 text-right">
+                <span className="sr-only">Actions</span>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -308,22 +375,22 @@ export default function UsersTable() {
             {USERS.map((user) => (
               <TableRow key={user.id}>
                 <TableCell className="pl-6">
-                  <Avatar size="default">
-                    {user.avatar && (
-                      <AvatarImage src={user.avatar} alt={user.name} />
-                    )}
-                    <AvatarFallback className="text-xs font-medium">
-                      {initials(user.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                </TableCell>
-                <TableCell>
-                  <div className="flex flex-col">
+                  <div className="flex items-center gap-2">
+                    <Avatar size="sm">
+                      {user.avatar && (
+                        <AvatarImage src={user.avatar} alt={user.name} />
+                      )}
+                      <AvatarFallback className="text-xs font-medium">
+                        {initials(user.name)}
+                      </AvatarFallback>
+                    </Avatar>
                     <span className="font-medium text-foreground">
                       {user.name}
                     </span>
-                    <span className="text-muted-foreground">{user.email}</span>
                   </div>
+                </TableCell>
+                <TableCell className="text-muted-foreground">
+                  {user.email}
                 </TableCell>
                 <TableCell className="text-muted-foreground">
                   {user.position}
@@ -353,6 +420,9 @@ export default function UsersTable() {
                 </TableCell>
                 <TableCell className="pr-6 text-center text-muted-foreground">
                   {formatDate(user.dateUpdated)}
+                </TableCell>
+                <TableCell className="pr-6 text-right">
+                  <UserRowActions user={user} />
                 </TableCell>
               </TableRow>
             ))}
