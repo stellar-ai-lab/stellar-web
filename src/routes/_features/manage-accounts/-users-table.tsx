@@ -6,9 +6,9 @@ import {
   ArrowDown01Icon,
   Briefcase04Icon,
   Calendar04Icon,
-  ColumnsThreeCogIcon,
   DashedLineCircleIcon,
   Ellipsis,
+  LayoutThreeColumnIcon,
   MailIcon,
   Refresh01Icon,
   UserGroupIcon,
@@ -383,7 +383,7 @@ export default function UsersTable() {
             <Button variant="outline" className="w-48 justify-between">
               <span className="flex items-center gap-2">
                 <HugeiconsIcon
-                  icon={ColumnsThreeCogIcon}
+                  icon={LayoutThreeColumnIcon}
                   className="size-4"
                 />
                 Columns
