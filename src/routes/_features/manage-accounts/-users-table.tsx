@@ -1,6 +1,19 @@
+import { useState } from "react"
 import { toast } from "sonner"
+import { HugeiconsIcon } from "@hugeicons/react"
+import {
+  AccountSetting03Icon,
+  Briefcase04Icon,
+  Calendar04Icon,
+  DashedLineCircleIcon,
+  Ellipsis,
+  MailIcon,
+  UserGroupIcon,
+  UserIcon,
+} from "@hugeicons/core-free-icons"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,16 +30,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Briefcase04Icon,
-  Calendar04Icon,
-  DashedLineCircleIcon,
-  Ellipsis,
-  StudentCardIcon,
-  UserGroupIcon,
-  UserIcon,
-} from "@hugeicons/core-free-icons"
-import { HugeiconsIcon } from "@hugeicons/react"
 
 type AccountStatus = "Active" | "Inactive" | "Pending"
 
@@ -222,22 +225,22 @@ const ROLE_LABELS: Record<User["role"], string> = {
 
 const ROLE_COLORS: Record<User["role"], string> = {
   Leadership: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
-  Manager: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-  Dev: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400",
-  Support: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
-  Lead: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  IC: "bg-muted text-muted-foreground",
+  Manager: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  Dev: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  Support: "bg-violet-500/10 text-violet-600 dark:text-violet-400",
+  Lead: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+  IC: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
 }
 
 const STATUS_COLORS: Record<AccountStatus, string> = {
   Active: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-  Inactive: "bg-muted text-muted-foreground",
+  Inactive: "bg-red-500/10 text-red-600 dark:text-red-400",
   Pending: "bg-amber-500/10 text-amber-600 dark:text-amber-400",
 }
 
 const STATUS_DOT: Record<AccountStatus, string> = {
   Active: "bg-emerald-500",
-  Inactive: "bg-muted-foreground",
+  Inactive: "bg-red-500",
   Pending: "bg-amber-500",
 }
 
@@ -312,40 +315,74 @@ function UserRowActions({ user }: { user: User }) {
 }
 
 export default function UsersTable() {
+  const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({})
+
+  const allSelected = USERS.length > 0 && USERS.every((u) => rowSelection[u.id])
+  const someSelected = !allSelected && USERS.some((u) => rowSelection[u.id])
+
+  const toggleAll = (checked: boolean) => {
+    if (checked) {
+      const next: Record<number, boolean> = {}
+      USERS.forEach((u) => (next[u.id] = true))
+      setRowSelection(next)
+    } else {
+      setRowSelection({})
+    }
+  }
+
+  const toggleRow = (id: number, checked: boolean) => {
+    setRowSelection((prev) => ({ ...prev, [id]: checked }))
+  }
+
   return (
     <div className="px-6 py-4">
       <div className="rounded-sm border">
-        <Table className="[&_td]:border-r [&_th]:border-r [&_td:last-child]:border-r-0 [&_th:last-child]:border-r-0">
+        <Table className="[&_td]:border-r [&_td:first-child]:border-r-0 [&_td:last-child]:border-r-0 [&_th]:border-r [&_th:first-child]:border-r-0 [&_th:last-child]:border-r-0">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="pl-6 text-muted-foreground">
+              <TableHead className="w-10 pl-6">
+                <Checkbox
+                  checked={
+                    allSelected ? true : someSelected ? "indeterminate" : false
+                  }
+                  onCheckedChange={(v) => toggleAll(!!v)}
+                  aria-label="Select all"
+                />
+              </TableHead>
+              <TableHead className="pl-3">
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={UserIcon} className="size-4" />
                   Name
                 </div>
               </TableHead>
-              <TableHead className="text-muted-foreground">
-                Email
+              <TableHead>
+                <div className="flex items-center gap-1.5">
+                  <HugeiconsIcon icon={MailIcon} className="size-4" />
+                  Email
+                </div>
               </TableHead>
-              <TableHead className="text-muted-foreground">
+              <TableHead>
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={Briefcase04Icon} className="size-4" />
                   Position
                 </div>
               </TableHead>
-              <TableHead className="text-muted-foreground">
+              <TableHead>
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={UserGroupIcon} className="size-4" />
                   Team
                 </div>
               </TableHead>
-              <TableHead className="text-muted-foreground">
+              <TableHead>
                 <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={StudentCardIcon} className="size-4" />
+                  <HugeiconsIcon
+                    icon={AccountSetting03Icon}
+                    className="size-4"
+                  />
                   Role
                 </div>
               </TableHead>
-              <TableHead className="text-muted-foreground">
+              <TableHead>
                 <div className="flex items-center gap-1.5">
                   <HugeiconsIcon
                     icon={DashedLineCircleIcon}
@@ -354,27 +391,35 @@ export default function UsersTable() {
                   Status
                 </div>
               </TableHead>
-              <TableHead className="text-muted-foreground">
-                <div className="flex items-center justify-center gap-1.5">
+              <TableHead>
+                <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
                   Date Joined
                 </div>
               </TableHead>
-              <TableHead className="pr-6 text-muted-foreground">
-                <div className="flex items-center justify-center gap-1.5">
+              <TableHead className="pr-6">
+                <div className="flex items-center gap-1.5">
                   <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
                   Last Updated
                 </div>
               </TableHead>
-              <TableHead className="w-12 pr-6 text-right">
-                <span className="sr-only">Actions</span>
-              </TableHead>
+              <TableHead className="w-12 text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {USERS.map((user) => (
-              <TableRow key={user.id}>
+              <TableRow
+                key={user.id}
+                data-state={rowSelection[user.id] ? "selected" : undefined}
+              >
                 <TableCell className="pl-6">
+                  <Checkbox
+                    checked={!!rowSelection[user.id]}
+                    onCheckedChange={(v) => toggleRow(user.id, !!v)}
+                    aria-label={`Select ${user.name}`}
+                  />
+                </TableCell>
+                <TableCell className="pl-3">
                   <div className="flex items-center gap-2">
                     <Avatar size="sm">
                       {user.avatar && (
@@ -415,14 +460,16 @@ export default function UsersTable() {
                     {user.status}
                   </span>
                 </TableCell>
-                <TableCell className="text-center text-muted-foreground">
+                <TableCell className="text-muted-foreground">
                   {formatDate(user.dateJoined)}
                 </TableCell>
-                <TableCell className="pr-6 text-center text-muted-foreground">
+                <TableCell className="pr-6 text-muted-foreground">
                   {formatDate(user.dateUpdated)}
                 </TableCell>
-                <TableCell className="pr-6 text-right">
-                  <UserRowActions user={user} />
+                <TableCell className="text-center">
+                  <div className="flex justify-center">
+                    <UserRowActions user={user} />
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
