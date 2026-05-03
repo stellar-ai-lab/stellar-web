@@ -3,11 +3,14 @@ import { toast } from "sonner"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   AccountSetting03Icon,
+  ArrowDown01Icon,
   Briefcase04Icon,
   Calendar04Icon,
+  ColumnsThreeCogIcon,
   DashedLineCircleIcon,
   Ellipsis,
   MailIcon,
+  Refresh01Icon,
   UserGroupIcon,
   UserIcon,
 } from "@hugeicons/core-free-icons"
@@ -16,6 +19,7 @@ import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   DropdownMenu,
+  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -244,6 +248,30 @@ const STATUS_DOT: Record<AccountStatus, string> = {
   Pending: "bg-amber-500",
 }
 
+const TOGGLEABLE_COLUMNS = [
+  { id: "name", label: "Name" },
+  { id: "email", label: "Email" },
+  { id: "position", label: "Position" },
+  { id: "team", label: "Team" },
+  { id: "role", label: "Role" },
+  { id: "status", label: "Status" },
+  { id: "dateJoined", label: "Date Joined" },
+  { id: "dateUpdated", label: "Last Updated" },
+] as const
+
+type ColumnId = (typeof TOGGLEABLE_COLUMNS)[number]["id"]
+
+const DEFAULT_COLUMN_VISIBILITY: Record<ColumnId, boolean> = {
+  name: true,
+  email: true,
+  position: true,
+  team: true,
+  role: true,
+  status: true,
+  dateJoined: true,
+  dateUpdated: false,
+}
+
 function initials(name: string) {
   return name
     .split(" ")
@@ -316,6 +344,9 @@ function UserRowActions({ user }: { user: User }) {
 
 export default function UsersTable() {
   const [rowSelection, setRowSelection] = useState<Record<number, boolean>>({})
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<ColumnId, boolean>
+  >(DEFAULT_COLUMN_VISIBILITY)
 
   const allSelected = USERS.length > 0 && USERS.every((u) => rowSelection[u.id])
   const someSelected = !allSelected && USERS.some((u) => rowSelection[u.id])
@@ -334,8 +365,51 @@ export default function UsersTable() {
     setRowSelection((prev) => ({ ...prev, [id]: checked }))
   }
 
+  const isVisible = (id: ColumnId) => columnVisibility[id]
+
+  const toggleColumn = (id: ColumnId, checked: boolean) => {
+    setColumnVisibility((prev) => ({ ...prev, [id]: checked }))
+  }
+
+  const resetColumns = () => {
+    setColumnVisibility(DEFAULT_COLUMN_VISIBILITY)
+  }
+
   return (
     <div className="px-6 py-4">
+      <div className="flex items-center justify-end pb-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="w-48 justify-between">
+              <span className="flex items-center gap-2">
+                <HugeiconsIcon
+                  icon={ColumnsThreeCogIcon}
+                  className="size-4"
+                />
+                Columns
+              </span>
+              <HugeiconsIcon icon={ArrowDown01Icon} className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            {TOGGLEABLE_COLUMNS.map((column) => (
+              <DropdownMenuCheckboxItem
+                key={column.id}
+                checked={isVisible(column.id)}
+                onCheckedChange={(v) => toggleColumn(column.id, !!v)}
+                onSelect={(e) => e.preventDefault()}
+              >
+                {column.label}
+              </DropdownMenuCheckboxItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={resetColumns}>
+              <HugeiconsIcon icon={Refresh01Icon} className="size-4" />
+              Reset
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <div className="rounded-sm border">
         <Table className="[&_td]:border-r [&_td:first-child]:border-r-0 [&_td:last-child]:border-r-0 [&_th]:border-r [&_th:first-child]:border-r-0 [&_th:last-child]:border-r-0">
           <TableHeader>
@@ -349,60 +423,76 @@ export default function UsersTable() {
                   aria-label="Select all"
                 />
               </TableHead>
-              <TableHead className="pl-3">
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={UserIcon} className="size-4" />
-                  Name
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={MailIcon} className="size-4" />
-                  Email
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={Briefcase04Icon} className="size-4" />
-                  Position
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={UserGroupIcon} className="size-4" />
-                  Team
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon
-                    icon={AccountSetting03Icon}
-                    className="size-4"
-                  />
-                  Role
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon
-                    icon={DashedLineCircleIcon}
-                    className="size-4"
-                  />
-                  Status
-                </div>
-              </TableHead>
-              <TableHead>
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
-                  Date Joined
-                </div>
-              </TableHead>
-              <TableHead className="pr-6">
-                <div className="flex items-center gap-1.5">
-                  <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
-                  Last Updated
-                </div>
-              </TableHead>
+              {isVisible("name") && (
+                <TableHead className="pl-3">
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon icon={UserIcon} className="size-4" />
+                    Name
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("email") && (
+                <TableHead>
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon icon={MailIcon} className="size-4" />
+                    Email
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("position") && (
+                <TableHead>
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon icon={Briefcase04Icon} className="size-4" />
+                    Position
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("team") && (
+                <TableHead>
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon icon={UserGroupIcon} className="size-4" />
+                    Team
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("role") && (
+                <TableHead>
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon
+                      icon={AccountSetting03Icon}
+                      className="size-4"
+                    />
+                    Role
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("status") && (
+                <TableHead>
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon
+                      icon={DashedLineCircleIcon}
+                      className="size-4"
+                    />
+                    Status
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("dateJoined") && (
+                <TableHead>
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
+                    Date Joined
+                  </div>
+                </TableHead>
+              )}
+              {isVisible("dateUpdated") && (
+                <TableHead className="pr-6">
+                  <div className="flex items-center gap-1.5">
+                    <HugeiconsIcon icon={Calendar04Icon} className="size-4" />
+                    Last Updated
+                  </div>
+                </TableHead>
+              )}
               <TableHead className="w-12 text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -419,53 +509,69 @@ export default function UsersTable() {
                     aria-label={`Select ${user.name}`}
                   />
                 </TableCell>
-                <TableCell className="pl-3">
-                  <div className="flex items-center gap-2">
-                    <Avatar size="sm">
-                      {user.avatar && (
-                        <AvatarImage src={user.avatar} alt={user.name} />
-                      )}
-                      <AvatarFallback className="text-xs font-medium">
-                        {initials(user.name)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium text-foreground">
-                      {user.name}
-                    </span>
-                  </div>
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {user.email}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {user.position}
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {user.team}
-                </TableCell>
-                <TableCell>
-                  <span
-                    className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_COLORS[user.role]}`}
-                  >
-                    {ROLE_LABELS[user.role]}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <span
-                    className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[user.status]}`}
-                  >
+                {isVisible("name") && (
+                  <TableCell className="pl-3">
+                    <div className="flex items-center gap-2">
+                      <Avatar size="sm">
+                        {user.avatar && (
+                          <AvatarImage src={user.avatar} alt={user.name} />
+                        )}
+                        <AvatarFallback className="text-xs font-medium">
+                          {initials(user.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium text-foreground">
+                        {user.name}
+                      </span>
+                    </div>
+                  </TableCell>
+                )}
+                {isVisible("email") && (
+                  <TableCell className="text-muted-foreground">
+                    {user.email}
+                  </TableCell>
+                )}
+                {isVisible("position") && (
+                  <TableCell className="text-muted-foreground">
+                    {user.position}
+                  </TableCell>
+                )}
+                {isVisible("team") && (
+                  <TableCell className="text-muted-foreground">
+                    {user.team}
+                  </TableCell>
+                )}
+                {isVisible("role") && (
+                  <TableCell>
                     <span
-                      className={`size-1.5 rounded-full ${STATUS_DOT[user.status]}`}
-                    />
-                    {user.status}
-                  </span>
-                </TableCell>
-                <TableCell className="text-muted-foreground">
-                  {formatDate(user.dateJoined)}
-                </TableCell>
-                <TableCell className="pr-6 text-muted-foreground">
-                  {formatDate(user.dateUpdated)}
-                </TableCell>
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${ROLE_COLORS[user.role]}`}
+                    >
+                      {ROLE_LABELS[user.role]}
+                    </span>
+                  </TableCell>
+                )}
+                {isVisible("status") && (
+                  <TableCell>
+                    <span
+                      className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_COLORS[user.status]}`}
+                    >
+                      <span
+                        className={`size-1.5 rounded-full ${STATUS_DOT[user.status]}`}
+                      />
+                      {user.status}
+                    </span>
+                  </TableCell>
+                )}
+                {isVisible("dateJoined") && (
+                  <TableCell className="text-muted-foreground">
+                    {formatDate(user.dateJoined)}
+                  </TableCell>
+                )}
+                {isVisible("dateUpdated") && (
+                  <TableCell className="pr-6 text-muted-foreground">
+                    {formatDate(user.dateUpdated)}
+                  </TableCell>
+                )}
                 <TableCell className="text-center">
                   <div className="flex justify-center">
                     <UserRowActions user={user} />
